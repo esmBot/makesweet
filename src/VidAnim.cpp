@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include <yarp/sig/Image.h>
+#include <yarp/cv/Cv.h>
 using namespace yarp::sig;
 using namespace yarp::os;
 
@@ -45,7 +46,7 @@ void VidAnim::apply(const char *fname) {
   Render *r = renders->get_render(0);
 
   // for some reason filename / container needs to be avi?
-  VideoWriter video(fname, CV_FOURCC('M','P','4','V'), rate, Size(r->get().width(),
+  VideoWriter video(fname, VideoWriter::fourcc('M','P','4','V'), rate, Size(r->get().width(),
                                                                   r->get().height()));
   Mat m;
   ImageOf<PixelBgr> v1;
@@ -61,7 +62,7 @@ void VidAnim::apply(const char *fname) {
       Render *r = renders->get_render(i);
       v1.copy(r->get());
       renders->remove_render(i);
-      m = cvarrToMat(static_cast<const IplImage*>(v1.getIplImage()));
+      m = yarp::cv::toCvMat(v1);
       base++;
     }
     video.write(m);

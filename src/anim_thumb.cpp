@@ -4,6 +4,7 @@
 #include "Filer.h"
 
 using namespace yarp::sig;
+using namespace yarp::os;
 
 int __ms_verbose = 0;
 
@@ -122,6 +123,9 @@ void process() {
 }
 
 int main() {
+  if (Network::getEnvironment("VERBOSE")=="1") {
+    __ms_verbose = 1;
+  }
   printf("Animation thumbnail\n");
   process();
   return 0;
